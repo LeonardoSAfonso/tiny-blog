@@ -1,0 +1,23 @@
+version: '1'
+
+services:
+  api:
+    container_name: tiny_blog_api
+    build: .
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - .:/home/api
+    environment:
+      DATABASE_HOST: database
+      DATABASE_PORT: 5432
+
+  database:
+    container_name: ${DATABASE_NAME}
+    image: postgres:13
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASS}
+    ports:
+      - ${DATABASE_PORT}:5432
