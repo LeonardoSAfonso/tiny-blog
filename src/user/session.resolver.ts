@@ -1,8 +1,8 @@
-import DefaultAuthGuard from 'src/shared/guards/auth.guard';
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import DefaultAuthGuard from '../shared/guards/auth.guard';
 import AuthType from './dtos/auth.type';
-import UserLoginInput from './dtos/UserLogin.input';
+import UserLoginInput from './dtos/userLogin.input';
 import SessionService from './session.service';
 import User from './user.entity';
 

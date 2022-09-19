@@ -1,8 +1,8 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import DefaultAuthGuard from 'src/shared/guards/auth.guard';
-import CreateUserInput from './dtos/CreateUser.input';
-import UpdateUserInput from './dtos/UpdateUser.input';
+import DefaultAuthGuard from '../shared/guards/auth.guard';
+import CreateUserInput from './dtos/createUser.input';
+import UpdateUserInput from './dtos/updateUser.input';
 import UserPaginationType from './dtos/userPagination.type';
 import User from './user.entity';
 import UserService from './user.service';
