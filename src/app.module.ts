@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import UserModule from './user/user.module';
 import AppController from './app.controller';
 import AppService from './app.service';
+import PostModule from './post/post.module';
 
 @Module({
   imports: [
@@ -33,7 +34,7 @@ import AppService from './app.service';
       context: ({ req }) => ({ req }),
     }),
     UserModule,
-    // PostModule,
+    PostModule,
   ],
   controllers: [AppController],
   providers: [AppService],

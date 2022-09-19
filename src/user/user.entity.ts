@@ -1,11 +1,13 @@
 import { Field, HideField, ID, ObjectType } from '@nestjs/graphql';
-// import Post from 'src/post/post.entity';
+import Post from 'src/post/post.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -43,9 +45,9 @@ export default class User {
   @Column({ default: 1 })
   access_level: number;
 
-  // @OneToMany(() => Post, post => post.user)
-  // @JoinColumn({ name: 'user_id' })
-  // posts: Post[];
+  @OneToMany(() => Post, post => post.user)
+  @JoinColumn({ name: 'user_id' })
+  posts: Post[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
