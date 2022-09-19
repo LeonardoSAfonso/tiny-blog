@@ -1,4 +1,4 @@
-import { UseGuards, Request } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import DefaultAuthGuard from 'src/shared/guards/auth.guard';
 import CreatePostInput from './dtos/createPost.input';
@@ -13,11 +13,7 @@ export default class PostResolver {
 
   @UseGuards(DefaultAuthGuard)
   @Mutation(() => Post)
-  async createPost(
-    @Args('data') data: CreatePostInput,
-    @Request() req,
-  ): Promise<Post> {
-    console.log(JSON.stringify(req, null, 2));
+  async createPost(@Args('data') data: CreatePostInput): Promise<Post> {
     const post = await this.postService.create(data);
 
     return post;
