@@ -1,12 +1,15 @@
 import { Field, HideField, ID, ObjectType } from '@nestjs/graphql';
-import HashProvider from 'src/shared/providers/hashProvider/hashProvider';
+// import Post from 'src/post/post.entity';
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import HashProvider from '../shared/providers/hashProvider/hashProvider';
 
 @ObjectType()
 @Entity()
@@ -22,7 +25,7 @@ export default class User {
   email: string;
 
   @HideField()
-  @Column({ transformer: HashProvider, nullable: true })
+  @Column({ nullable: true })
   password?: string;
 
   @Column({ default: false })
@@ -40,9 +43,19 @@ export default class User {
   @Column({ default: 1 })
   access_level: number;
 
+  // @OneToMany(() => Post, post => post.user)
+  // @JoinColumn({ name: 'user_id' })
+  // posts: Post[];
+
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  encryptPassword() {
+    this.password = HashProvider.to(this.password);
+  }
 }

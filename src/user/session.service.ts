@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { randomBytes } from 'crypto';
 import { JwtService } from '@nestjs/jwt';
-import HashProvider from 'src/shared/providers/hashProvider/hashProvider';
-import UserLoginInput from './dtos/UserLogin.input';
+import HashProvider from '../shared/providers/hashProvider/hashProvider';
+import UserLoginInput from './dtos/userLogin.input';
 import User from './user.entity';
 import UserService from './user.service';
 
@@ -32,7 +32,8 @@ export default class SessionService {
     const token = await this.generateToken(user);
 
     if (user.first_access) {
-      await this.userService.save({ ...user, first_access: false });
+      user.first_access = false;
+      await this.userService.save(user);
     }
 
     return { user, token };
@@ -54,6 +55,9 @@ export default class SessionService {
     if (user.password) {
       throw new ConflictException('Usuário já possui senha cadastrada.');
     }
+
+    // Estrategia para substituir o listener do typeorm
+    // user.password = HashProvider.to(password);
 
     user.password = password;
     user.email_checked = true;
@@ -77,6 +81,9 @@ export default class SessionService {
     if (HashProvider.compare(oldPassword, user.password)) {
       throw new UnauthorizedException('Senha inválida');
     }
+
+    // Estrategia para substituir o listener do typeorm
+    // user.password = HashProvider.to(newPassword);
 
     user.password = newPassword;
 
@@ -115,6 +122,9 @@ export default class SessionService {
     if (new Date() > new Date(user.token_expiresin)) {
       throw new UnprocessableEntityException('Token expirado');
     }
+
+    // Estrategia para substituir o listener do typeorm
+    // user.password = HashProvider.to(password);
 
     user.password = password;
 
