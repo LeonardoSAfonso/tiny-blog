@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
-import CreateUserInput from './dtos/CreateUser.input';
-import UpdateUserInput from './dtos/UpdateUser.input';
+import CreateUserInput from './dtos/createUser.input';
+import UpdateUserInput from './dtos/updateUser.input';
 import User from './user.entity';
 
 @Injectable()
@@ -78,8 +78,13 @@ export default class UserService {
   async update(id: number, data: UpdateUserInput): Promise<User> {
     const user = await this.findById(id);
 
-    user.email = data.email || user.email;
-    user.name = data.name || user.name;
+    Object.keys(user).forEach(key => {
+      if (!user[key]) {
+        delete user[key];
+      }
+    });
+
+    Object.assign(user, data);
 
     await this.userRepository.save(user);
 
@@ -99,7 +104,7 @@ export default class UserService {
   async delete(id: number): Promise<string> {
     const user = await this.findById(id);
 
-    await this.userRepository.delete(user);
+    await this.userRepository.delete(user.id);
 
     return 'Usuário deletado com sucesso';
   }
