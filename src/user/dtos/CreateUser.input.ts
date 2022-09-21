@@ -8,6 +8,4 @@ export default class CreateUserInput {
   email: string;
 
   password?: string;
-
-  access_level?: number;
 }

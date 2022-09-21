@@ -5,9 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
 import UserModule from './user/user.module';
-import AppController from './app.controller';
-import AppService from './app.service';
-import PostModule from './post/post.module';
 
 @Module({
   imports: [
@@ -34,9 +31,8 @@ import PostModule from './post/post.module';
       context: ({ req }) => ({ req }),
     }),
     UserModule,
-    PostModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export default class AppModule {}
