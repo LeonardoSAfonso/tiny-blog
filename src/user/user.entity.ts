@@ -11,7 +11,6 @@ import {
 @Entity()
 export default class User {
   @PrimaryGeneratedColumn()
-  @Field(() => ID)
   id: number;
 
   @Column()
@@ -25,14 +24,20 @@ export default class User {
   password?: string;
 
   @Column({ default: false })
-  first_access: boolean;
+  first_access: boolean = false;
 
   @Column({ default: false })
-  email_checked: boolean;
+  email_checked: boolean = false;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
+
+  constructor(name: string, email: string, password?: string) {
+    this.name = name;
+    this.email = email;
+    this.password = password;
+  }
 }

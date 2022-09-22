@@ -4,32 +4,17 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
-import UserModule from './user/user.module';
+import { UserModule } from './user/user.module';
+import { OrmProvider } from './provider.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: `${process.cwd()}/.env`,
-      isGlobal: true,
-    }),
-    TypeOrmModule.forRootAsync({
-      useFactory: () => ({
-        type: 'postgres',
-        host: process.env.DATABASE_HOST,
-        port: +process.env.DATABASE_PORT,
-        username: process.env.DATABASE_USER,
-        password: process.env.DATABASE_PASS,
-        database: process.env.DATABASE_NAME,
-        entities: ['dist/**/*.entity{.ts,.js}'],
-        synchronize: true,
-        autoLoadEntities: true,
-      }),
-    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       context: ({ req }) => ({ req }),
     }),
+    OrmProvider,
     UserModule,
   ],
   controllers: [],
