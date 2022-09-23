@@ -41,7 +41,7 @@ export default class PostService {
   async findAllByUser(
     userId: number,
     offset: number,
-    limit: number,
+    limit?: number,
     search?: string,
   ): Promise<[Post[], number]> {
     await this.userService.findById(userId);
@@ -59,7 +59,7 @@ export default class PostService {
 
   async findAll(
     offset: number,
-    limit: number,
+    limit?: number,
     search?: string,
   ): Promise<[Post[], number]> {
     const posts = await this.postRepository.findAndCount({
@@ -103,5 +103,19 @@ export default class PostService {
     await this.postRepository.delete(post.id);
 
     return 'Postagem deletada com sucesso';
+  }
+
+  async cleanTable() {
+    const { tableName } = this.postRepository.metadata;
+
+    try {
+      await this.postRepository.query(`DELETE FROM ${tableName};`);
+
+      await this.postRepository.query(
+        `ALTER SEQUENCE ${tableName}_id_seq RESTART WITH 1;`,
+      );
+    } catch (err) {
+      throw new Error(`Clean Table Error: ${err}`);
+    }
   }
 }
