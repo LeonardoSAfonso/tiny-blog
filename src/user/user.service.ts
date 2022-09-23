@@ -115,9 +115,9 @@ export default class UserService {
     try {
       await this.userRepository.query(`DELETE FROM ${tableName};`);
 
-      // await this.userRepository.query(
-      //   `DELETE FROM sqlite_sequence WHERE name='${tableName}'`,
-      // );
+      await this.userRepository.query(
+        `ALTER SEQUENCE ${tableName}_id_seq RESTART WITH 1;`,
+      );
     } catch (err) {
       throw new Error(`Clean Table Error: ${err}`);
     }

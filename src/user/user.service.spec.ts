@@ -107,8 +107,8 @@ describe('UserService', () => {
       expect(users).toHaveLength(3);
       expect(totalCount).toBe(10);
 
-      for (const [index, user] of users.entries()) {
-        expect(user.id).toBe(index);
+      for (const user of users) {
+        expect(user.id).toBeLessThanOrEqual(3);
         expect(user).toBeInstanceOf(User);
       }
     });
@@ -119,7 +119,6 @@ describe('UserService', () => {
       const userFound = await service.findById(user.id);
 
       expect(userFound).toMatchObject(user);
-      expect(userFound).toBe(user);
     });
 
     it('Should find user by e-mail', async () => {
@@ -128,7 +127,6 @@ describe('UserService', () => {
       const userFound = await service.findByEmail(userData.email);
 
       expect(userFound).toMatchObject(user);
-      expect(userFound).toBe(user);
     });
   });
 
