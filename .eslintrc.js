@@ -23,6 +23,8 @@ module.exports = {
     'no-underscore-dangle': 'error',
     'no-useless-constructor': 'off',
     'no-restricted-syntax': 'off',
+    'no-plusplus': 'off',
+    'no-await-in-loop': 'off',
     'no-nested-ternary': 'off',
     'no-param-reassign': 'off',
     'prettier/prettier': 'error',

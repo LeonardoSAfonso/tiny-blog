@@ -78,7 +78,7 @@ export default class SessionService {
       throw new ConflictException('Usuário não possui senha cadastrada.');
     }
 
-    if (HashProvider.compare(oldPassword, user.password)) {
+    if (!HashProvider.compare(oldPassword, user.password)) {
       throw new UnauthorizedException('Senha inválida');
     }
 
