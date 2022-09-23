@@ -41,7 +41,7 @@ export default class UserService {
 
   async findAll(
     offset: number,
-    limit: number,
+    limit?: number,
     search?: string,
   ): Promise<[User[], number]> {
     const users = await this.userRepository.findAndCount({
@@ -107,5 +107,19 @@ export default class UserService {
     await this.userRepository.delete(user.id);
 
     return 'Usuário deletado com sucesso';
+  }
+
+  async cleanTable() {
+    const { tableName } = this.userRepository.metadata;
+
+    try {
+      await this.userRepository.query(`DELETE FROM ${tableName};`);
+
+      // await this.userRepository.query(
+      //   `DELETE FROM sqlite_sequence WHERE name='${tableName}'`,
+      // );
+    } catch (err) {
+      throw new Error(`Clean Table Error: ${err}`);
+    }
   }
 }
