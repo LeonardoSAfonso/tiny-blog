@@ -1,3 +1,4 @@
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import OrmProvider from 'src/ormProvider.module';
 import hashProvider from 'src/shared/providers/hashProvider/hashProvider';
@@ -52,6 +53,14 @@ describe('UserService', () => {
       expect(
         hashProvider.compare(userData.password, user.password),
       ).toBeTruthy();
+    });
+
+    it('Should reject create with existing e-mail', async () => {
+      await service.create(userData);
+
+      await expect(service.create(userData)).rejects.toThrowError(
+        ConflictException,
+      );
     });
 
     it('Should be created with default access level', async () => {
@@ -121,12 +130,29 @@ describe('UserService', () => {
       expect(userFound).toMatchObject(user);
     });
 
+    it('Should reject find user by invalid id', async () => {
+      await expect(service.findById(1)).rejects.toThrowError(NotFoundException);
+    });
+
     it('Should find user by e-mail', async () => {
       const user = await service.create(userData);
 
       const userFound = await service.findByEmail(userData.email);
 
       expect(userFound).toMatchObject(user);
+    });
+
+    it('Should find user with search', async () => {
+      for (let index = 0; index < 10; index++) {
+        userData.email = `mail${index}@mailtest.com`;
+        await service.create(userData);
+      }
+
+      const [userFound] = await service.findAll(0, 10, 'mailtest');
+
+      for (const user of userFound) {
+        expect(user.email).toContain('mailtest');
+      }
     });
   });
 
