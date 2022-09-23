@@ -1,0 +1,97 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  first_access: Boolean!
+  email_checked: Boolean!
+  forgotten_token: String
+  token_expiresin: DateTime
+  access_level: Float!
+  posts: [Post!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+  user_id: Float!
+  user: User!
+  createdAt: DateTime!
+  updateAt: DateTime!
+}
+
+type UserPaginationType {
+  users: [User!]!
+  totalCount: Float!
+}
+
+type AuthType {
+  user: User!
+  token: String!
+}
+
+type PostPaginationType {
+  posts: [Post!]!
+  totalCount: Float!
+}
+
+type Query {
+  findUsers(offset: Float!, limit: Float!, search: String): UserPaginationType!
+  findUser(id: Float!): User!
+  authorize(data: UserLoginInput!): AuthType!
+  requestUserPasswordReset(email: String!): String!
+  findPosts(offset: Float!, limit: Float!, search: String): PostPaginationType!
+  findPostsByUser(userId: Float!, offset: Float!, limit: Float!, search: String): PostPaginationType!
+  findPost(id: Float!): Post!
+}
+
+input UserLoginInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  createUser(data: CreateUserInput!): User!
+  updateUser(id: Float!, data: UpdateUserInput!): User!
+  deleteUser(id: Float!): String!
+  createUserPassword(email: String!, password: String!): User!
+  changeUserPassword(email: String!, oldPassword: String!, newPassword: String!): User!
+  userPasswordReset(email: String!, token: String!, password: String!): String!
+  createPost(data: CreatePostInput!): Post!
+  updatePost(id: Float!, data: UpdatePostInput!): Post!
+  deletePost(id: Float!): String!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  password: String
+  access_level: Float
+}
+
+input UpdateUserInput {
+  name: String
+  email: String
+}
+
+input CreatePostInput {
+  title: String!
+  content: String!
+  user_id: Float!
+}
+
+input UpdatePostInput {
+  title: String
+  content: String
+}
