@@ -14,7 +14,7 @@ import {
 import HashProvider from '../shared/providers/hashProvider/hashProvider';
 
 @ObjectType()
-@Entity()
+@Entity({ name: 'users' })
 export default class User {
   @PrimaryGeneratedColumn()
   @Field(() => ID)
